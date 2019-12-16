@@ -1,0 +1,36 @@
+>>> python manage.py migrate
+>>> python manage.py makemigrations <appname>
+py manage.py makemigrations allauth
+>>> python manage.py migrate <appname>
+
+To fix it Site matching query does not exist.
+>>> python manage.py shell
+>>> from django.contrib.sites.models import Site
+>>> Site.objects.create(name='localhost:8000', domain='localhost:8000')
+>>> exit()
+>>> python manage.py createsuperuser
+>>> python manage.py runserver
+
+OperationalError: database is locked
+>>> from django import db
+>>> db.connections.close_all()
+
+
+
+
+
+
+
+
+curl --header "Content-Type: application/json" --request POST --data "{\"username\":\"dms\",\"password\":\"24081999\"}" http://localhost:8000/rest-auth/login/
+curl --header "Content-Type: application/json" --request POST -c cookies.txt  --data "{\"username\":\"dms\",\"password\":\"24081999\"}" http://localhost:8000/rest-auth/login/
+
+With Session: 'rest_framework.authentication.SessionAuthentication':
+curl -X GET -b cookies.txt  http://localhost:8000/api/user/current/
+curl --cookie "sessionid=<from cookies.txt>"  http://localhost:8000/api/user/current/
+curl --header "Cookie: sessionid=<from cookies.txt>"  http://localhost:8000/api/user/current/
+curl -X GET -b cookies.txt -d "csrfmiddlewaretoken=<from cookies.txt>"  http://localhost:8000/api/user/current/
+
+With Token: 'rest_framework.authentication.TokenAuthentication' (One key for all login devices, if 1 device logout then all devices logout):
+curl -k -L -H "Authorization: Token <token>" http://localhost:8000/api/user/current/
+
