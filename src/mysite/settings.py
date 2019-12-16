@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth',
     'rest_auth.registration',
+    'frontend',
     'core',
     
 ]

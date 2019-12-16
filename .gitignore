@@ -1,7 +1,7 @@
 .idea/
 .vscode/
 venv-v3.8.0/
+__pycache__/
 
-
-src/reactify-ui/node_modules/
+node_modules/
 src/reactify-ui/build/
