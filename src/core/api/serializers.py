@@ -172,16 +172,16 @@ class ProfileSerializer(ModelSerializer):
             # print(followers)
         return followers
 
-class UserDetailSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     profile = ProfileSerializer(required=False)
-    pk = PrimaryKeyRelatedField(queryset=User.objects.all())
+    # pk = PrimaryKeyRelatedField(queryset=User.objects.all())
     current_user = SerializerMethodField('curruser')
     followed_by=SerializerMethodField()
     class Meta:
         model=User
         fields=[
             'id',
-            'pk',
+            # 'pk',
             'username',
             'email',
             'first_name',
@@ -190,6 +190,22 @@ class UserDetailSerializer(ModelSerializer):
             'current_user',
             'followed_by',
         ]
+        
+    def update(self, instance, validated_data, *args, **kwargs):
+        # print("Instance is",instance.username)
+        profile_data = validated_data.pop("profile")
+        profile=Profile.objects.get(user=instance)
+        profile.bio=profile_data.get("bio",profile.bio)
+        profile.location=profile_data.get("location",profile.location)
+        profile.birth_date=profile_data.get("birth_date",profile.birth_date)
+        profile.image=profile_data.get("image",profile.image)
+        profile.save()
+        instance.username=validated_data.get("username",instance.username)
+        instance.email=validated_data.get("email",instance.email)
+        instance.first_name=validated_data.get("first_name",instance.first_name)
+        instance.last_name=validated_data.get("last_name",instance.last_name)
+        instance.save()
+        return instance
 
     def curruser(self, obj):
         try:
@@ -210,6 +226,7 @@ class UserDetailSerializer(ModelSerializer):
             return followers
         except:
             pass
+         
 
 class UserRUDSerializer(ModelSerializer):
     profile = ProfileSerializer(required=True)
@@ -228,31 +245,12 @@ class UserRUDSerializer(ModelSerializer):
             'current_user',
             'followed_by',
         ]
-    
-    def update(self, instance, validated_data, *args, **kwargs):
-        # print("Instance is",instance.username)
-        profile_data = validated_data.pop("profile")
-        profile=Profile.objects.get(user=instance)
-        profile.bio=profile_data.get("bio",profile.bio)
-        profile.location=profile_data.get("location",profile.location)
-        profile.birth_date=profile_data.get("birth_date",profile.birth_date)
-        profile.image=profile_data.get("image",profile.image)
-        profile.save()
-        instance.username=validated_data.get("username",instance.username)
-        instance.email=validated_data.get("email",instance.email)
-        instance.first_name=validated_data.get("first_name",instance.first_name)
-        instance.last_name=validated_data.get("last_name",instance.last_name)
-        instance.save()
-        return instance
-        
-
     # def destroy(self, instance, validated_data, *args, **kwargs):
     #     if(self.context['request'].user.username==instance.username):
     #         print("Instance is",instance.username)
     #         # instance.delete()
     #     else:
     #         return self.context['request'].user
-
     def curruser(self, obj):
         try:
             return self.context['request'].user.id

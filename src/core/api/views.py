@@ -6,8 +6,7 @@ from django.db.models import Q
 from django.db.models.functions import Concat
 from django.db.models import Value
 from .serializers import (
-    UserDetailSerializer,
-    UserRUDSerializer,
+    UserSerializer
 )
 from rest_framework.generics import (
     CreateAPIView,
@@ -28,8 +27,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated
 )
-
-User=get_user_model()
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework import status
@@ -46,6 +44,10 @@ from rest_auth.registration.views import SocialConnectView
 from django.utils import timezone
 from django.contrib.sessions.models import Session
 import datetime
+
+
+User=get_user_model()
+
 
 class GoogleLogin(SocialConnectView):
     adapter_class = GoogleOAuth2Adapter
@@ -97,16 +99,20 @@ class DeleteAllUnexpiredSessionsForUser(APIView):
 
 class CurrentUserAPIView(APIView):
     def get(self, request):
-        serializer = UserDetailSerializer(request.user,context={'request': request})
+        serializer = UserSerializer(request.user,context={'request': request})
         newdict={"sessionkey":request.session.session_key}
         newdict.update(serializer.data)
         return Response(serializer.data)
 
 
-class UserListAPIView(ListAPIView):
-    serializer_class=UserDetailSerializer
+class UserView(ModelViewSet):
+    lookup_field= 'pk'
+    serializer_class=UserSerializer
     permission_classes = [AllowAny]
-    def get_queryset(self):
+    queryset =User.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super(UserView, self).get_queryset(*args, **kwargs)
         qs=User.objects.all()
         query=self.request.GET.get('s')
         if query is not None:
@@ -116,39 +122,45 @@ class UserListAPIView(ListAPIView):
                 Q(last_name__icontains=query)
             ).distinct()
         return qs
-
-class UserRUDView(RetrieveUpdateDestroyAPIView):
-    lookup_field= 'username'
-    serializer_class=UserRUDSerializer
-    queryset=User
-
-    def get(self, request, username, *args, **kwargs):
-        if(username!=request.user.username):
+    
+    def retrieve(self, request, pk, *args, **kwargs):
+        print("current pk",pk,request.user.pk)
+        if not request.user.is_authenticated:
+            return Response({"detail": "Auth not provided."}, status=400)
+        # elif int(pk)!=int(request.user.pk):
+        #     return Response({"detail": "Not found."}, status=400)
+        else:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+            
+    def update(self, request, pk, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Auth not provided."}, status=400)
+        elif int(pk)!=int(request.user.pk):
             return Response({"detail": "Not found."}, status=400)
         else:
-            serializer = UserRUDSerializer(request.user,context={'request': request})
-            return Response(serializer.data)
-    def update(self, request, username, *args, **kwargs):
-        if(username!=request.user.username):
-            return Response({"detail": "Not found."}, status=400)
-        else:
-            serializer = UserRUDSerializer(request.user,context={'request': request})
+            partial = kwargs.pop('partial', False)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
             return Response(serializer.data)
 
-    def destroy(self, request, username, *args, **kwargs):
-        if(username!=request.user.username):
+    def destroy(self, request, pk, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Auth not provided."}, status=400)
+        elif int(pk)!=int(request.user.pk):
             return Response({"detail": "Not found."}, status=400)
         else:
-            serializer = UserRUDSerializer(request.user,context={'request': request})
-            return Response(serializer.data)
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # def get_queryset(self,*args, **kwargs):
-    #     print(*args, **kwargs)
-    #     return User.objects.all()
 
 
 class FollowUnfollowAPIView(APIView):
-    serializer_class = UserDetailSerializer
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'username'
     queryset = User.objects.all()
@@ -160,8 +172,8 @@ class FollowUnfollowAPIView(APIView):
             # print("Hey", request.user, toggle_user)
             is_following = Profile.objects.toggle_follow(request.user, toggle_user)
             user_qs = get_object_or_404(User, username=toggle_user)
-            serializer = UserDetailSerializer(user_qs,context={'request': request})
-            serializer2 = UserDetailSerializer(request.user,context={'request': request})
+            serializer = UserSerializer(user_qs,context={'request': request})
+            serializer2 = UserSerializer(request.user,context={'request': request})
             new_serializer_data = dict(serializer.data)
             new_serializer_data2 = dict(serializer2.data)
             new_serializer_data.update({'following': is_following})
@@ -182,7 +194,7 @@ class FollowRemoveAPIView(APIView):
             # print("Hey", request.user, toggle_user)
             is_following = Profile.objects.toggle_remove_follow(request.user, toggle_user)
             user_qs = get_object_or_404(User, username=toggle_user)
-            serializer = UserDetailSerializer(user_qs,context={'request': request})
+            serializer = UserSerializer(user_qs,context={'request': request})
             new_serializer_data = dict(serializer.data)
             new_serializer_data.update({'following': is_following})
             new_serializer_data.update({'count': request.user.followed_by.all().count()})
