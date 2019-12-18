@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 0
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 # SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -94,13 +94,14 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'mysite.middleware.AddHeadersAPIMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
      # Note that this needs to be placed above CommonMiddleware
     'django.middleware.common.CommonMiddleware', # This should already exist 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'mysite.middleware.AddHeadersAPIMiddleware',
+    # 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
