@@ -88,8 +88,11 @@ class DeleteAllUnexpiredSessionsForUser(APIView):
     def get(self, request):
         try:
             unexpired_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+            for session in unexpired_sessions:
+                print(session.session_key)
+            print(request.session.session_key)    
             [
-                session.delete() for session in unexpired_sessions
+                session.delete() for session in unexpired_sessions if str(session.session_key)!=str(request.session.session_key)
                 if str(request.user.id) == session.get_decoded().get('_auth_user_id')
             ] 
         except:

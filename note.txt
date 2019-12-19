@@ -29,7 +29,7 @@ With Session: 'rest_framework.authentication.SessionAuthentication':
 curl -X GET -b cookies.txt  http://localhost:8000/api/user/current/
 curl --cookie "sessionid=<from cookies.txt>"  http://localhost:8000/api/user/current/
 curl --header "Cookie: sessionid=<from cookies.txt>"  http://localhost:8000/api/user/current/
-curl -X GET -b cookies.txt -d "csrfmiddlewaretoken=<from cookies.txt>"  http://localhost:8000/api/user/current/
+curl -X GET -b cookies.txt -d "csrfmiddlewaretoken=<from cookies.txt>"  http://localhost:8000/api/user/current/details/
 
 With Token: 'rest_framework.authentication.TokenAuthentication' (One key for all login devices, if 1 device logout then all devices logout):
 curl -k -L -H "Authorization: Token <token>" http://localhost:8000/api/user/current/

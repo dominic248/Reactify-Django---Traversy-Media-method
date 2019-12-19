@@ -2,6 +2,8 @@
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework.response import Response
+
+
 # def AddHeadersAPIMiddleware(get_response):
 #     # One-time configuration and initialization.
 #     def middleware(request):
@@ -18,7 +20,10 @@ from rest_framework.response import Response
 
 class AddHeadersAPIMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        request.COOKIES['sessionid']="993bgdy5843vdavbpbbbs1c42ja4hy2u"
+        try:
+            request.COOKIES['sessionid']=request.COOKIES['sessionid']
+        except:
+            pass
         print(request.GET)
         # return request
 

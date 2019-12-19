@@ -53,15 +53,16 @@ INSTALLED_APPS = [
     
 ]
 
-SITE_ID = 0
+SITE_ID = 2
 
-SECURE_SSL_REDIRECT = False
-# SESSION_EXPIRE_AT_BROWSER_CLOSE=True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-# SESSION_SAVE_EVERY_REQUEST =True
+# SECURE_SSL_REDIRECT = False
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+SESSION_SAVE_EVERY_REQUEST =True
 SESSION_COOKIE_AGE=1209
-SESSION_CACHE_ALIAS = "default"
+# SESSION_CACHE_ALIAS = "default"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 AUTH_PROFILE_MODULE = 'core.profile'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -87,21 +88,16 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
-
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'mysite.middleware.AddHeadersAPIMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-     # Note that this needs to be placed above CommonMiddleware
-    'django.middleware.common.CommonMiddleware', # This should already exist 
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
