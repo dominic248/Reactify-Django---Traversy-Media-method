@@ -21,6 +21,7 @@
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.36",
     "axios": "^0.19.0",
     "js-cookie": "^2.2.1",
     "mdbreact": "^4.23.1",

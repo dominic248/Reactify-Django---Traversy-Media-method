@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import axios from "axios";
 // import './App.css';
 import AppbarComponent from './AppbarComponent';
+import AddFabComponent from './AddFabComponent';
 
 class App extends React.Component{
   constructor(props){
@@ -113,6 +114,7 @@ class App extends React.Component{
       {/* <div style={{textAlign:"center",position: "absolute",top:"50%",left: "50%",transform: "translate(-50%,-50%)"}}>
       <LoginModal handleRec={this.handleRec} isAuthenticated={this.state.isAuthenticated} />
       </div> */}
+      <AddFabComponent />
       </div>
     );
   }
