@@ -23,7 +23,7 @@ const useStyles = theme => ({
   },
   fullList: {
     //   for bottom and top drawer only
-    width: "xl"
+    width: "auto"
   }
 });
 
@@ -163,7 +163,7 @@ class RightDrawerComponent extends React.Component {
 
   list = classes => (
     <div
-      className={classes.fullList}
+      className={classes.list}
       role="presentation"
       onClick={this.handleClose}
       onKeyDown={this.handleClose}
@@ -245,7 +245,7 @@ class BottomDrawerComponent extends React.Component {
 
   list = classes => (
     <div
-      className={classes.list}
+      className={classes.fullList}
       role="presentation"
       onClick={this.handleClose}
       onKeyDown={this.handleClose}
