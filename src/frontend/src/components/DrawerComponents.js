@@ -12,9 +12,8 @@ import {
   SvgIcon,
   Icon
 } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Link } from "react-router-dom";
+
 
 
 
@@ -24,7 +23,7 @@ const useStyles = theme => ({
   },
   fullList: {
     //   for bottom and top drawer only
-    width: "auto"
+    width: "xl"
   }
 });
 
@@ -37,25 +36,29 @@ class LeftDrawerComponent extends React.Component {
     menu1: [
       {
         name: "Inbox",
-        icon: <Icon>inbox</Icon>
+        icon: <Icon>inbox</Icon>,
+        link: "/inbox"
       },
       {
         name: "Starred",
-        icon: <Icon>star</Icon>
+        icon: <Icon>star</Icon>,
+        link: "/"
       },
       {
         name: "Send email",
-        icon: <Icon>send</Icon>
+        icon: <Icon>send</Icon>,
+        link: "/"
       },
       {
         name: "Drafts",
-        icon: <Icon>drafts</Icon>
+        icon: <Icon>drafts</Icon>,
+        link: "/"
       }
     ],
     menu2: [
       {
         name: "All mail",
-        icon: <Icon>email</Icon>
+        icon: <Icon>email</Icon> 
       },
       {
         name: "Trash",
@@ -80,7 +83,7 @@ class LeftDrawerComponent extends React.Component {
     >
       <List>
         {this.state.menu1.map((text, index) => (
-          <ListItem button key={text.name}>
+          <ListItem button key={text.name} component={Link} to={text.link}>
             <ListItemIcon>{text.icon}</ListItemIcon>
             <ListItemText primary={text.name} />
           </ListItem>
@@ -160,7 +163,7 @@ class RightDrawerComponent extends React.Component {
 
   list = classes => (
     <div
-      className={classes.list}
+      className={classes.fullList}
       role="presentation"
       onClick={this.handleClose}
       onKeyDown={this.handleClose}

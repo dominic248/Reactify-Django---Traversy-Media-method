@@ -17,13 +17,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 from django.views.generic import TemplateView
 from core.api.views import ConfirmEmailView
 
+routes = getattr(settings, 'REACT_ROUTES', [])
 
 urlpatterns = [
+    url(r'^(%s)?$' % '|'.join(routes), TemplateView.as_view(template_name='react.html')),
     path('admin/', admin.site.urls),  
-    path('', TemplateView.as_view(template_name='react.html')),
+    # path('', TemplateView.as_view(template_name='react.html')),
     path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api-auth/', include('rest_framework.urls')),
     # path('accounts/password/reset/key/<slug>/', capture_url, name='password_reset_confirm_custom'),

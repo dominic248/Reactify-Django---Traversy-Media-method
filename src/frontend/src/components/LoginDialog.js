@@ -12,7 +12,7 @@ import Switch from "@material-ui/core/Switch";
 
 class LoginDialog extends React.Component {
   state = {
-    isOpen: false,
+    isOpen: true,
     username: "",
     password: "",
     rememberme: false
@@ -63,7 +63,7 @@ class LoginDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
           maxWidth="xs"
-          fullWidth="true"
+          fullWidth={true}
           style={{ textAlign: "center" }}
           
         >

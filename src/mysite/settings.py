@@ -52,6 +52,13 @@ INSTALLED_APPS = [
     'core',
     
 ]
+REACT_ROUTES = [
+    'inbox',
+    'search',
+    'password-reset',
+    'password-change',
+    'about',
+]
 
 SITE_ID = 2
 

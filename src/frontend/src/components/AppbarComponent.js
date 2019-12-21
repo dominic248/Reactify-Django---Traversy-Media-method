@@ -20,6 +20,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { Link } from "react-router-dom";
 
 
 const useStyles = theme => ({
@@ -33,10 +34,11 @@ const useStyles = theme => ({
     flexGrow: 1
   },
   title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
-    }
+    display: "block"
+    // display: "none",
+    // [theme.breakpoints.up("sm")]: {
+    //   display: "block"
+    // }
   },
   search: {
     position: "relative",
@@ -97,8 +99,7 @@ class AppbarComponent extends React.Component {
     mobileMoreAnchorEl: null,
   };
 
-  isMenuOpen = Boolean(this.state.anchorEl);
-  isMobileMenuOpen = Boolean(this.state.mobileMoreAnchorEl);
+  
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -110,12 +111,12 @@ class AppbarComponent extends React.Component {
 
   handleMenuClose = () => {
     this.setState({ anchorEl: null });
-    handleMobileMenuClose();
+    this.handleMobileMenuClose();
   };
 
   handleMobileMenuOpen = event => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
-    this.openBottomDrawer();
+    // this.openBottomDrawer();
   };
 
   openLeftDrawer = () => {
@@ -133,15 +134,26 @@ class AppbarComponent extends React.Component {
   render() {
     const { classes } = this.props;
 
+    const isMenuOpen = Boolean(this.state.anchorEl);
+    const isMobileMenuOpen = Boolean(this.state.mobileMoreAnchorEl);
+
     const menuId = "primary-search-account-menu";
     const renderMenu = (
+      
       <Menu
         anchorEl={this.state.anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
         id={menuId}
         keepMounted
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={this.isMenuOpen}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        getContentAnchorEl={null}
+        open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
@@ -157,10 +169,10 @@ class AppbarComponent extends React.Component {
         id={mobileMenuId}
         keepMounted
         transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={this.isMobileMenuOpen}
+        open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
+        <MenuItem onClick={this.handleMobileMenuClose}>
           <IconButton aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
@@ -168,7 +180,7 @@ class AppbarComponent extends React.Component {
           </IconButton>
           <p>Messages</p>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={this.handleMobileMenuClose}>
           <IconButton aria-label="show 11 new notifications" color="inherit">
             <Badge badgeContent={11} color="secondary">
               <NotificationsIcon />
@@ -176,7 +188,8 @@ class AppbarComponent extends React.Component {
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
+        <MenuItem onClick={this.handleMobileMenuClose}>
+        {/* onClick={this.handleProfileMenuOpen}> */}
           <IconButton
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
@@ -207,7 +220,7 @@ class AppbarComponent extends React.Component {
               <Typography className={classes.title} variant="h6" noWrap>
                 Material-UI
               </Typography>
-              <div className={classes.search}>
+              {/* <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
                 </div>
@@ -219,8 +232,11 @@ class AppbarComponent extends React.Component {
                   }}
                   inputProps={{ "aria-label": "search" }}
                 />
-              </div>
+              </div> */}
               <div className={classes.grow} />
+              <IconButton color="inherit" component={Link} to="/search">
+              <SearchIcon />
+              </IconButton>
               <div className={classes.sectionDesktop}>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                   <Badge badgeContent={4} color="secondary">
@@ -265,7 +281,7 @@ class AppbarComponent extends React.Component {
         <LeftDrawer ref="leftDrawer" />
         <RightDrawer ref="rightDrawer" />
         <BottomDrawer ref="bottomDrawer" />
-        <button onClick={this.openRightDrawer}>Click right</button>
+        {/* <button onClick={this.openRightDrawer}>Click right</button> */}
         
       </>
     );

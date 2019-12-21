@@ -3,8 +3,11 @@ import Cookies from 'js-cookie';
 import axios from "axios";
 // import './App.css';
 import AppbarComponent from './AppbarComponent';
+import AppbarTabsComponent from './AppbarTabsComponent';
 import AddFabComponent from './AddFabComponent';
 import LoginDialog from './LoginDialog';
+import SearchBoxComponent from './SearchBoxComponent';
+import {BrowserRouter,Route,Switch,Redirect} from 'react-router-dom';
 
 class App extends React.Component{
   constructor(props){
@@ -107,14 +110,27 @@ class App extends React.Component{
     await this.initLogin(username,password,rememberme)
   }
   render() {
+    const supportsHistory='pushState' in window.history;
     return (
       <div>
-        
-      <AppbarComponent loginState={this.state.isAuthenticated} />
+        <BrowserRouter forceRefresh={!supportsHistory}>
+          <Switch>
+          <Route exact path='/search' component={SearchBoxComponent} />
+            <Route path='/' render={()=>(
+              <>
+                <AppbarComponent loginState={this.state.isAuthenticated} />
+                <AppbarTabsComponent loginState={this.state.isAuthenticated} />
+                <Route exact path='/inbox' component={AddFabComponent} />
+              </>
+            )} 
+            />
+
+          </Switch>
+          <LoginDialog handleRec={this.handleRec} isAuthenticated={this.state.isAuthenticated} />
+        </BrowserRouter>
       {/* <div style={{textAlign:"center",position: "absolute",top:"50%",left: "50%",transform: "translate(-50%,-50%)"}}>
       </div> */}
-      <AddFabComponent />
-      <LoginDialog handleRec={this.handleRec} isAuthenticated={this.state.isAuthenticated} />
+      
       </div>
     );
   }
