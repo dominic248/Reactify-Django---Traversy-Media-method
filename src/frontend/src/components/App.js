@@ -1,11 +1,11 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import axios from "axios";
-// import './App.css';
+import './App.css';
 import AppbarComponent from './AppbarComponent';
-import AppbarTabsComponent from './AppbarTabsComponent';
+
 import AddFabComponent from './AddFabComponent';
-import LoginDialog from './LoginDialog';
+import SignInSignUpDialogComponent from './SignInSignUpDialogComponent';
 import SearchBoxComponent from './SearchBoxComponent';
 import {BrowserRouter,Route,Switch,Redirect} from 'react-router-dom';
 
@@ -104,7 +104,7 @@ class App extends React.Component{
       await this.setState({isAuthenticated:this.auth,session_id:this.sessionkey})
       await console.log(this.state.isAuthenticated,this.state.session_id)
   }
-  handleRec = async(username,password,rememberme) => {
+  handleSignInAPI = async(username,password,rememberme) => {
     console.log("Main", username,password,rememberme)
     // await this.setState({username:username,password:password,rememberme:rememberme})
     await this.initLogin(username,password,rememberme)
@@ -119,18 +119,16 @@ class App extends React.Component{
             <Route path='/' render={()=>(
               <>
                 <AppbarComponent loginState={this.state.isAuthenticated} />
-                <AppbarTabsComponent loginState={this.state.isAuthenticated} />
+                <button>Hello</button>
                 <Route exact path='/inbox' component={AddFabComponent} />
               </>
             )} 
             />
 
           </Switch>
-          <LoginDialog handleRec={this.handleRec} isAuthenticated={this.state.isAuthenticated} />
+          <SignInSignUpDialogComponent handleSignInAPI={this.handleSignInAPI} isAuthenticated={this.state.isAuthenticated} />
         </BrowserRouter>
-      {/* <div style={{textAlign:"center",position: "absolute",top:"50%",left: "50%",transform: "translate(-50%,-50%)"}}>
-      </div> */}
-      
+     
       </div>
     );
   }

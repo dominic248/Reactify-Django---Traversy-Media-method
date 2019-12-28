@@ -14,6 +14,7 @@ import {
   Fab,
 
 } from "@material-ui/core";
+import Collapse from '@material-ui/core/Collapse';
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -21,6 +22,9 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
+import AppbarTabsComponent from './AppbarTabsComponent';
+import SearchBoxComponent from './SearchBoxComponent';
+import { Redirect } from 'react-router';
 
 
 const useStyles = theme => ({
@@ -97,6 +101,7 @@ class AppbarComponent extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    isNotSearch:true
   };
 
   
@@ -130,6 +135,15 @@ class AppbarComponent extends React.Component {
   openBottomDrawer = () => {
     console.log("hell");
     this.refs.bottomDrawer.handleOpen();
+  };
+
+  handleSearchOpen = () => {
+    console.log("search");
+    this.setState({ isNotSearch:false });
+  };
+  handleSearchClose= () => {
+    console.log("search close");
+    this.setState({ isNotSearch:true });
   };
   render() {
     const { classes } = this.props;
@@ -202,12 +216,16 @@ class AppbarComponent extends React.Component {
         </MenuItem>
       </Menu>
     );
-
+    
     return (
+
       <>
+      <Collapse in={this.state.isNotSearch} {...(this.state.isNotSearch ? { timeout: 500 } : { timeout: 500 })}>
         <div className={classes.grow}>
+        
           <AppBar position="static">
             <Toolbar>
+
               <IconButton
                 edge="start"
                 className={classes.menuButton}
@@ -220,21 +238,8 @@ class AppbarComponent extends React.Component {
               <Typography className={classes.title} variant="h6" noWrap>
                 Material-UI
               </Typography>
-              {/* <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput
-                  }}
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </div> */}
               <div className={classes.grow} />
-              <IconButton color="inherit" component={Link} to="/search">
+              <IconButton color="inherit" onClick={this.handleSearchOpen} >
               <SearchIcon />
               </IconButton>
               <div className={classes.sectionDesktop}>
@@ -274,6 +279,7 @@ class AppbarComponent extends React.Component {
                 </IconButton>
               </div>
             </Toolbar>
+
           </AppBar>
           {renderMobileMenu}
           {renderMenu}
@@ -281,10 +287,15 @@ class AppbarComponent extends React.Component {
         <LeftDrawer ref="leftDrawer" />
         <RightDrawer ref="rightDrawer" />
         <BottomDrawer ref="bottomDrawer" />
+        <AppbarTabsComponent loginState={this.props.isAuthenticated} />
+        </Collapse>
         {/* <button onClick={this.openRightDrawer}>Click right</button> */}
-        
+        <Collapse in={!this.state.isNotSearch} {...(!this.state.isNotSearch ? { timeout: 500 } : { timeout: 0 })}>
+          <SearchBoxComponent handleSearchClose={this.handleSearchClose} />
+        </Collapse>
       </>
     );
+    
   }
 }
 

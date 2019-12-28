@@ -18,6 +18,7 @@ const useStyles = theme => ({
     display: 'flex',
     alignItems: 'center',
     width: 400,
+    isSearch:false
   },
   grow: {
     flexGrow: 1
@@ -36,6 +37,9 @@ const useStyles = theme => ({
 });
 
 class SearchBoxComponent extends React.Component {
+  handleSearchClose= () => {
+    this.props.handleSearchClose();
+  };
 render(){
     const { classes } = this.props;
 
@@ -43,7 +47,7 @@ render(){
     <div className={classes.grow}>
           <AppBar position="static" style={{background :"white"}}>
             <Toolbar>
-      <IconButton edge="start" className={classes.iconButton} aria-label="menu" component={Link} to="/">
+      <IconButton edge="start" className={classes.iconButton} aria-label="menu" onClick={this.handleSearchClose}>
       <Icon>arrow_back</Icon>
       </IconButton>
       <InputBase
@@ -54,10 +58,6 @@ render(){
       <IconButton type="submit" className={classes.iconButton} aria-label="search">
         <SearchIcon />
       </IconButton>
-      {/* <Divider className={classes.divider} orientation="vertical" />
-      <IconButton color="primary" className={classes.iconButton} aria-label="directions">
-        <DirectionsIcon />
-      </IconButton> */}
     </Toolbar>
           </AppBar>
          

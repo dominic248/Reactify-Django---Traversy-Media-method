@@ -1,7 +1,9 @@
 .App {
   text-align: center;
 }
-
+button{
+  background-color: aqua;
+}
 .App-logo {
   height: 40vmin;
 }
