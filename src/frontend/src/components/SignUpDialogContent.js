@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -24,20 +25,54 @@ class SignUpDialogContent extends React.Component {
     confirm_password: ""
   };
 
+  
+  async initRegister(submit){
+    await axios.post('http://localhost:8000/rest-auth/registration/',{
+        username: this.state.username,
+        password1: this.state.password,
+        password2: this.state.confirm_password,
+        email: this.state.email,
+        submit:submit
+    },{
+      headers: {
+          'Content-Type': 'application/json',
+      }
+    },{
+      withCredentials:true
+    })
+    .then(response => {
+      // var responsed=JSON.stringify(response)
+      console.log(response);  
+    })
+    .catch(error => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+    })
+  }
   handleChangeText = async ({ target }) => {
     await this.setState({ [target.name]: target.value });
     console.log(this.state.username,this.state.email, this.state.password,this.state.confirm_password);
+    await this.initRegister(false)
   };
 
-  handleClickSubmit = async e => {
+  handleClickSubmit = async (e) => {
     e.preventDefault();
+    await this.initRegister(true)
     await console.log(this.state.username, this.state.password);
     this.props.handleClose()
-    // await this.props.handle(
-    //   this.state.username,
-    //   this.state.password,
-    //   this.state.rememberme
-    // );
   };
 
   render() {
@@ -70,6 +105,7 @@ class SignUpDialogContent extends React.Component {
                 margin="dense"
                 id="signup-password"
                 value={this.state.password}
+                type="password"
                 name="password"
                 onChange={this.handleChangeText}
                 label="Password"
@@ -80,6 +116,7 @@ class SignUpDialogContent extends React.Component {
                 margin="dense"
                 id="signup-confirm-password"
                 value={this.state.confirm_password}
+                type="password"
                 name="confirm_password"
                 onChange={this.handleChangeText}
                 label="Confirm Password"

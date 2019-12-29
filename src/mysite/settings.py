@@ -227,6 +227,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = True
@@ -238,9 +239,8 @@ REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'core.api.serializers.PasswordResetSerializer',
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'core.api.serializers.PasswordResetConfirmSerializer',
 }
-# REST_AUTH_REGISTER_SERIALIZERS={
-#     'REGISTER_SERIALIZER ': 'rest_auth.registration.serializers.RegisterSerializer',
-# }
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework.authentication.SessionAuthentication',
@@ -268,7 +268,7 @@ OAUTH2_PROVIDER = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # mail service smtp
 EMAIL_HOST_USER = 'dms24081999@gmail.com'  # email id
-EMAIL_HOST_PASSWORD = 'fjkhladauujxjiud'  # password
+EMAIL_HOST_PASSWORD = 'hpeytpfcstxsdenv'  # password
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

@@ -33,6 +33,8 @@ class App extends React.Component{
   
   async componentDidMount(){
     var sessioncookie=Cookies.get()
+    this.auth=false
+    this.sessionkey=''
     console.log(sessioncookie.session_id);
     await console.log(this.state.isAuthenticated,this.state.session_id)
     if(sessioncookie.session_id!==undefined){
@@ -58,7 +60,6 @@ class App extends React.Component{
         .catch(error => {
           error=JSON.stringify(error)
           console.log(error)
-          // auth=true
           this.auth=false
           this.sessionkey=''
           

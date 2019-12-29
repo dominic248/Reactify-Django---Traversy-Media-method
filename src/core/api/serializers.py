@@ -23,6 +23,9 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from allauth.account.utils import url_str_to_user_pk
 from allauth.account.forms import default_token_generator
 from allauth.account.utils import send_email_confirmation
+from allauth.utils import (email_address_exists,
+                               get_username_max_length)
+from allauth.account import app_settings as allauth_settings
 from rest_auth.models import TokenModel
 User=get_user_model()
 
@@ -79,6 +82,7 @@ class LoginSerializer(Serializer):
         attrs['user'] = user
         return attrs
 
+
 class TokenSerializer(ModelSerializer):
     """
     Serializer for Token model.
@@ -90,6 +94,7 @@ class TokenSerializer(ModelSerializer):
     class Meta:
         model = TokenModel
         fields = ('key','session_key')
+
 
 class PasswordResetSerializer(Serializer):
     """
