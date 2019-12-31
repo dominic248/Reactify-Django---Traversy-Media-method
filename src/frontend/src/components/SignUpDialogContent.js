@@ -2,27 +2,23 @@ import React from "react";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+
 
 class SignUpDialogContent extends React.Component {
   state = {
     username: "",
+    username_error: "",
     email: "",
+    email_error: "",
     password: "",
-    confirm_password: ""
+    password_error: "",
+    confirm_password: "",
+    confirm_password_error: "",
   };
 
   
@@ -42,15 +38,20 @@ class SignUpDialogContent extends React.Component {
     })
     .then(response => {
       // var responsed=JSON.stringify(response)
-      console.log(response);  
+      console.log(response); 
+      this.setState({username_error: "",email_error: "",password_error: "",confirm_password_error: ""}) 
     })
     .catch(error => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        error.response.data.username ? this.setState({username_error: error.response.data.username}) : this.setState({username_error: ""})
+        error.response.data.email ? this.setState({email_error: error.response.data.email}) : this.setState({email_error: ""})
+        error.response.data.password1 ? this.setState({password_error: error.response.data.password1}) : this.setState({password_error: ""})
+        error.response.data.password2 ? this.setState({confirm_password_error: error.response.data.password2}) : this.setState({confirm_password_error: ""})
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -81,6 +82,8 @@ class SignUpDialogContent extends React.Component {
         <DialogContent>
               <DialogContentText>Please Sign-up</DialogContentText>
               <TextField
+                error={this.state.username_error !== ""}
+                helperText={this.state.username_error}
                 autoFocus
                 margin="dense"
                 id="signup-username"
@@ -92,6 +95,8 @@ class SignUpDialogContent extends React.Component {
               />
               <br />
               <TextField
+              error={this.state.email_error !== ""}
+              helperText={this.state.email_error}
                 margin="dense"
                 id="signup-email"
                 value={this.state.email}
@@ -102,6 +107,8 @@ class SignUpDialogContent extends React.Component {
               />
               <br />
               <TextField
+              error={this.state.password_error !== ""}
+              helperText={this.state.password_error}
                 margin="dense"
                 id="signup-password"
                 value={this.state.password}
@@ -113,6 +120,8 @@ class SignUpDialogContent extends React.Component {
               />
               <br />
               <TextField
+              error={this.state.confirm_password_error !== ""}
+              helperText={this.state.confirm_password_error}
                 margin="dense"
                 id="signup-confirm-password"
                 value={this.state.confirm_password}

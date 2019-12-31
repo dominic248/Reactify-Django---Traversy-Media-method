@@ -9,15 +9,14 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { FormControlLabel, Checkbox } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
-import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+
+import Cookies from "js-cookie";
+import axios from "axios";
 
 class SignInDialogContent extends React.Component {
   state = {
+    non_field_errors:"",
+    password_error:"",
     username: "",
     password: "",
     rememberme: false
@@ -25,6 +24,7 @@ class SignInDialogContent extends React.Component {
 
   handleChangeText = async ({ target }) => {
     await this.setState({ [target.name]: target.value });
+    await this.setState({ non_field_errors: '', password_error: ''});
     console.log(this.state.username, this.state.password);
   };
   handleChangeRememberMe = async event => {
@@ -34,12 +34,59 @@ class SignInDialogContent extends React.Component {
   handleClickSubmit = async e => {
     e.preventDefault();
     await console.log(this.state.username, this.state.password);
-    await this.props.handle(
+    await this.initLogin(
       this.state.username,
       this.state.password,
       this.state.rememberme
     );
   };
+  async initLogin(username, password, rememberme) {
+    await axios
+      .post(
+        "http://localhost:8000/rest-auth/login/",
+        {
+          username: username,
+          password: password
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        },
+        { withCredentials: true }
+      )
+      .then(response => {
+        console.log(response);
+        if (rememberme) {
+          Cookies.set("session_id", response.data.session_key, { expires: 60 });
+          Cookies.set("sessionid", response.data.session_key, { expires: 60 });
+        } else {
+          Cookies.set("session_id", response.data.session_key);
+          Cookies.set("sessionid", response.data.session_key);
+        }
+        this.auth = true;
+        this.sessionkey = response.data.session_key;
+        var sessioncookie = Cookies.get();
+        console.log("Cookies after login: ", sessioncookie);
+      })
+      .catch(error => {
+        if (error.response) {
+          console.log("hel",error.response.data);
+          error.response.data.non_field_errors ? this.setState({non_field_errors: error.response.data.non_field_errors}) : this.setState({non_field_errors: ""})
+          error.response.data.password ? this.setState({password_error: error.response.data.password}) : this.setState({password_error: ""})
+          console.log("hel",this.state.non_field_errors);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error", error.message);
+        }
+        this.auth = false;
+        this.sessionkey = "";
+      });
+    await this.props.handleSignInSubmit({
+      isAuthenticated: this.auth,
+      session_id: this.sessionkey
+    });
+    await console.log(this.state.isAuthenticated, this.state.session_id);
+  }
 
   render() {
     return (
@@ -48,6 +95,8 @@ class SignInDialogContent extends React.Component {
           <DialogContentText>Welcome dear user!</DialogContentText>
           <TextField
             autoFocus
+            error={this.state.non_field_errors !== "" }
+            helperText={this.state.non_field_errors}
             margin="dense"
             id="signin-username"
             value={this.state.username}
@@ -58,6 +107,8 @@ class SignInDialogContent extends React.Component {
           />
           <br />
           <TextField
+          error={this.state.non_field_errors !== "" || this.state.password_error !== ""}
+          helperText={this.state.non_field_errors || this.state.password_error}
             margin="dense"
             id="signin-password"
             value={this.state.password}

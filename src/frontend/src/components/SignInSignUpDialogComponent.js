@@ -78,12 +78,10 @@ class SignInSignUpDialogComponent extends React.Component {
     await this.setState({ rememberme: event.target.checked });
     console.log(this.state.rememberme);
   };
-  handleClickSubmit = async (username,password,rememberme) => {
-    await console.log(username, password,rememberme);
-    await this.props.handleSignInAPI(
-      username,
-      password,
-      rememberme
+  handleSignInSubmit = async (isAuthenticated,session_id) => {
+    await console.log(isAuthenticated,session_id);
+    await this.props.handleSignInSubmit(
+      isAuthenticated,session_id
     );
     // console.log(this.props.isAuthenticated)
     if (this.props.isAuthenticated === true) {
@@ -122,7 +120,7 @@ class SignInSignUpDialogComponent extends React.Component {
           </Tabs>
           <TabPanel value={this.state.value} index={0}>
             {/* <DialogTitle id="form-dialog-title">Sign-in</DialogTitle> */}
-            <SignInDialogContent handle={this.handleClickSubmit} handleClose={this.handleClose}/>
+            <SignInDialogContent handleSignInSubmit={this.handleSignInSubmit} handleClose={this.handleClose}/>
           </TabPanel>
           <TabPanel value={this.state.value} index={1}>
             {/* <DialogTitle id="form-dialog-title">Sign-up</DialogTitle> */}
