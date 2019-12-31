@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 REACT_ROUTES = [
     'inbox',
     'search',
+    'settings',
     'password-reset',
     'password-change',
     'about',

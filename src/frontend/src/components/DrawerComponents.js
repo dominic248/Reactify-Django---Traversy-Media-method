@@ -58,15 +58,23 @@ class LeftDrawerComponent extends React.Component {
     menu2: [
       {
         name: "All mail",
-        icon: <Icon>email</Icon> 
+        icon: <Icon>email</Icon>, 
+        link: "/inbox"
       },
       {
         name: "Trash",
-        icon: <Icon>restore_from_trash</Icon>
+        icon: <Icon>trash</Icon>, 
+        link: "/inbox"
       },
       {
         name: "Spam",
-        icon: <Icon>block</Icon>
+        icon: <Icon>block</Icon>, 
+        link: "/inbox"
+      },
+      {
+        name: "Settings",
+        icon: <Icon>settings</Icon>, 
+        link: "/settings"
       }
     ]
   };
@@ -92,7 +100,7 @@ class LeftDrawerComponent extends React.Component {
       <Divider />
       <List>
         {this.state.menu2.map((text, index) => (
-          <ListItem button key={text.name}>
+          <ListItem button key={text.name} component={Link} to={text.link}>
             <ListItemIcon>{text.icon}</ListItemIcon>
             <ListItemText primary={text.name} />
           </ListItem>

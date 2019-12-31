@@ -3,11 +3,17 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import "./App.css";
 import AppbarComponent from "./AppbarComponent";
-
+import { withStyles } from "@material-ui/core/styles";
 import AddFabComponent from "./AddFabComponent";
 import SignInSignUpDialogComponent from "./SignInSignUpDialogComponent";
 import SearchBoxComponent from "./SearchBoxComponent";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+const useStyles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+})
 
 class App extends React.Component {
   constructor(props) {
@@ -26,6 +32,7 @@ class App extends React.Component {
     await this.getData();
     await console.log(this.state.isAuthenticated, this.state.session_id);
   }
+
   async getData() {
     var sessioncookie = Cookies.get();
     this.auth = false;
@@ -81,12 +88,14 @@ class App extends React.Component {
     await this.getData();
   };
   render() {
+    const { classes } = this.props;
     const supportsHistory = "pushState" in window.history;
     return (
-      <div>
+      <div className={classes.root}>
         <BrowserRouter forceRefresh={!supportsHistory}>
           <Switch>
             <Route exact path="/search" component={SearchBoxComponent} />
+            <Route exact path="/settings" component={SearchBoxComponent} />
             <Route
               path="/"
               render={() => (
@@ -107,4 +116,4 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+export default withStyles(useStyles)(App);

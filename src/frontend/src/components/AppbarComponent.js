@@ -22,15 +22,34 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
-import AppbarTabsComponent from './AppbarTabsComponent';
+import TabPanelComponent from './TabPanelComponent';
 import SearchBoxComponent from './SearchBoxComponent';
 import { Redirect } from 'react-router';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+function Tabsa11yProps(index) {
+  return {
+    id: `nav-tab-${index}`,
+    'aria-controls': `nav-tabpanel-${index}`,
+  };
+}
+
+function LinkTab(props) {
+  return (
+    <Tab
+      component="a"
+      onClick={event => {
+        event.preventDefault();
+      }}
+      {...props}
+    />
+  );
+}
 
 
 const useStyles = theme => ({
-  root: {
-    flexGrow: 1
-  },
+
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -101,9 +120,12 @@ class AppbarComponent extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    isNotSearch:true
+    isNotSearch:true,
+    tabPanelValue:0
   };
-
+  handleTabPanelChange = (event, newValue) => {
+    this.setState({tabPanelValue: newValue});
+  };
   
 
   handleProfileMenuOpen = event => {
@@ -222,10 +244,8 @@ class AppbarComponent extends React.Component {
       <>
       <Collapse in={this.state.isNotSearch} {...(this.state.isNotSearch ? { timeout: 500 } : { timeout: 500 })}>
         <div className={classes.grow}>
-        
           <AppBar position="static">
             <Toolbar>
-
               <IconButton
                 edge="start"
                 className={classes.menuButton}
@@ -279,15 +299,25 @@ class AppbarComponent extends React.Component {
                 </IconButton>
               </div>
             </Toolbar>
-
+            <Tabs
+            variant="fullWidth"
+            value={this.state.tabPanelValue}
+            onChange={this.handleTabPanelChange}
+            aria-label="nav tabs example"
+            >
+            <LinkTab label="Chats" href="/drafts" {...Tabsa11yProps(0)} />
+            <LinkTab label="Status" href="/trash" {...Tabsa11yProps(1)} />
+            <LinkTab label="Calls" href="/spam" {...Tabsa11yProps(2)} />
+            </Tabs>
           </AppBar>
           {renderMobileMenu}
           {renderMenu}
+          <TabPanelComponent loginState={this.props.isAuthenticated} tabPanelValue={this.state.tabPanelValue} />
         </div>
         <LeftDrawer ref="leftDrawer" />
         <RightDrawer ref="rightDrawer" />
         <BottomDrawer ref="bottomDrawer" />
-        <AppbarTabsComponent loginState={this.props.isAuthenticated} />
+        
         </Collapse>
         {/* <button onClick={this.openRightDrawer}>Click right</button> */}
         <Collapse in={!this.state.isNotSearch} {...(!this.state.isNotSearch ? { timeout: 500 } : { timeout: 0 })}>
