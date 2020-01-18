@@ -39,19 +39,39 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites', 
+
     'crispy_forms',
     'sslserver',
     'oauth2_provider',
+
     'rest_framework',
     'rest_framework.authtoken',
+
     'allauth', 
     'allauth.account',
+
     'rest_auth',
     'rest_auth.registration',
+
+    'chatterbot.ext.django_chatterbot',
+
     'frontend',
     'core',
     
 ]
+
+CHATTERBOT = {
+    'name': 'Charlie',
+    # 'logic_adapters': [
+    #     'chatterbot.logic.MathematicalEvaluation',
+    #     'chatterbot.logic.TimeLogicAdapter',
+    #     'chatterbot.logic.BestMatch'
+    # ],
+    # 'storage_adapter':'chatterbot.storage.SQLStorageAdapter',
+    # 'database_uri':'sqlite:///database.db',
+    # read_only=True
+}
+
 REACT_ROUTES = [
     'inbox',
     'search',
@@ -103,7 +123,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

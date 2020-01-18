@@ -48,6 +48,77 @@ import datetime
 
 User=get_user_model()
 
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+from django.http import JsonResponse
+import json
+
+class ChatterBotApiView(APIView):
+    permission_classes = [AllowAny]
+    """
+    Provide an API endpoint to interact with ChatterBot.
+    """
+    chatterbot = ChatBot(**settings.CHATTERBOT)
+    def post(self, request, *args, **kwargs):
+        """
+        Return a response to the statement in the posted data.
+        * The JSON data should contain a 'text' attribute.
+        """
+        input_data = request.data
+        if 'text' not in input_data:
+            return Response({
+                'text': [
+                    'The attribute "text" is required.'
+                ]
+            }, status=400)
+        response = self.chatterbot.get_response(input_data)
+        response_data = response.serialize()
+        if response.confidence>0.7:
+            return Response(response_data, status=200)
+        else:
+            response_data["text"]="Sorry, couldn't process your query, try something else?"
+            return Response(response_data, status=200)
+
+# {"text": "486"}
+    def get(self, request, *args, **kwargs):
+        """
+        Return data corresponding to the current conversation.
+        """
+        return Response({
+            'name': self.chatterbot.name
+        })
+
+class ChatterBotTrainApiView(APIView):
+    permission_classes = [AllowAny]
+    """
+    Provide an API endpoint to interact with ChatterBot.
+    """
+    chatterbot = ChatBot(**settings.CHATTERBOT)
+    def get(self, request, *args, **kwargs):
+        """
+        Return data corresponding to the current conversation.
+        """
+        trainer = ListTrainer(self.chatterbot)
+        trainer.train([
+            "I would like to book a flight.",
+            "Your flight has been booked."
+        ])
+        trainer.train([
+            "Hi",
+            "Hey"
+        ])
+        trainer.train([
+            'How are you?',
+            'I am good.',
+            'That is good to hear.',
+            'Thank you',
+            'You are welcome.',
+        ])
+    
+        return Response({
+            'details': "Trained Successfully!"
+        })
+       
 
 class GoogleLogin(SocialConnectView):
     adapter_class = GoogleOAuth2Adapter

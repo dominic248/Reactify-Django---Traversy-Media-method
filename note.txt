@@ -34,3 +34,5 @@ curl -X GET -b cookies.txt -d "csrfmiddlewaretoken=<from cookies.txt>"  http://l
 With Token: 'rest_framework.authentication.TokenAuthentication' (One key for all login devices, if 1 device logout then all devices logout):
 curl -k -L -H "Authorization: Token <token>" http://localhost:8000/api/user/current/
 
+curl -d "{\"text\": \"Thank?\"}" --request POST http://localhost:8000/api/chatbot/
+

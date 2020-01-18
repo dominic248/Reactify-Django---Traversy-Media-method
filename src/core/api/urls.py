@@ -8,7 +8,7 @@ from .views import (
     FollowRemoveAPIView,
     FollowUnfollowAPIView,
     GoogleLogin,
-    DeleteAllUnexpiredSessionsForUser
+    DeleteAllUnexpiredSessionsForUser,
 
 )
 from rest_framework import routers
@@ -27,5 +27,6 @@ urlpatterns = [
     # path('posts/<slug>/', UserPostListAPIView.as_view(),name='user-posts-api'),
     path('<slug>/follow/', FollowUnfollowAPIView.as_view(), name='user-follow-toggle'),
     path('<slug>/followremove/', FollowRemoveAPIView.as_view(), name='user-follow-remove'),
+    
 
 ]
