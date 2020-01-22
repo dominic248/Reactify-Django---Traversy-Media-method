@@ -1,7 +1,9 @@
 .idea/
 
 venv-v3.7.0/
+venv-v3.7.6/
 venv-v3.8.0/
+migrations/
 __pycache__/
 
 node_modules/
