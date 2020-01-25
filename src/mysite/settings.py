@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     'allauth', 
     'allauth.account',
+    'allauth.socialaccount.providers.google',
 
     'rest_auth',
     'rest_auth.registration',
