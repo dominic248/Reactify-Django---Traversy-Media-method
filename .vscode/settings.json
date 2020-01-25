@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "venv-v3.8.0\\Scripts\\python.exe",
-    "python.venvPath":"${workspaceFolder}\\venv-v3.8.0\\Scripts\\activate",
+    "python.pythonPath": "venv-v3.7.6\\Scripts\\python.exe",
+    "python.venvPath":"${workspaceFolder}\\venv-v3.7.6\\Scripts\\activate",
     "python.terminal.activateEnvironment": true
 }

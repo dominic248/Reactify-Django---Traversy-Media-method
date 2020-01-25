@@ -62,14 +62,16 @@ INSTALLED_APPS = [
 
 CHATTERBOT = {
     'name': 'Charlie',
+    'django_app_name':'django_chatterbot',
     # 'logic_adapters': [
     #     'chatterbot.logic.MathematicalEvaluation',
     #     'chatterbot.logic.TimeLogicAdapter',
     #     'chatterbot.logic.BestMatch'
     # ],
     # 'storage_adapter':'chatterbot.storage.SQLStorageAdapter',
-    # 'database_uri':'sqlite:///database.db',
-    # read_only=True
+    'storage_adapter':'chatterbot.storage.SQLStorageAdapter',
+    'database_uri':'sqlite:///dbchatbot.sqlite3',
+    # 'read_only':True
 }
 
 REACT_ROUTES = [

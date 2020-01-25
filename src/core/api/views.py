@@ -73,13 +73,15 @@ class ChatterBotApiView(APIView):
             }, status=400)
         response = self.chatterbot.get_response(input_data)
         response_data = response.serialize()
-        if response.confidence>0.7:
+        print(response.confidence)
+        if response.confidence>0.5:
             return Response(response_data, status=200)
         else:
             response_data["text"]="Sorry, couldn't process your query, try something else?"
             return Response(response_data, status=200)
 
 # {"text": "486"}
+# {"text": "Hi"}
     def get(self, request, *args, **kwargs):
         """
         Return data corresponding to the current conversation.
@@ -88,36 +90,36 @@ class ChatterBotApiView(APIView):
             'name': self.chatterbot.name
         })
 
-class ChatterBotTrainApiView(APIView):
-    permission_classes = [AllowAny]
-    """
-    Provide an API endpoint to interact with ChatterBot.
-    """
-    chatterbot = ChatBot(**settings.CHATTERBOT)
-    def get(self, request, *args, **kwargs):
-        """
-        Return data corresponding to the current conversation.
-        """
-        trainer = ListTrainer(self.chatterbot)
-        trainer.train([
-            "I would like to book a flight.",
-            "Your flight has been booked."
-        ])
-        trainer.train([
-            "Hi",
-            "Hey"
-        ])
-        trainer.train([
-            'How are you?',
-            'I am good.',
-            'That is good to hear.',
-            'Thank you',
-            'You are welcome.',
-        ])
+# class ChatterBotTrainApiView(APIView):
+#     permission_classes = [AllowAny]
+#     """
+#     Provide an API endpoint to interact with ChatterBot.
+#     """
+#     chatterbot = ChatBot(**settings.CHATTERBOT)
+#     def get(self, request, *args, **kwargs):
+#         """
+#         Return data corresponding to the current conversation.
+#         """
+#         trainer = ListTrainer(self.chatterbot)
+#         trainer.train([
+#             "I would like to book a flight.",
+#             "Your flight has been booked."
+#         ])
+#         trainer.train([
+#             "Hi",
+#             "Hey"
+#         ])
+#         trainer.train([
+#             'How are you?',
+#             'I am good.',
+#             'That is good to hear.',
+#             'Thank you',
+#             'You are welcome.',
+#         ])
     
-        return Response({
-            'details': "Trained Successfully!"
-        })
+#         return Response({
+#             'details': "Trained Successfully!"
+#         })
        
 
 class GoogleLogin(SocialConnectView):
