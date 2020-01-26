@@ -20,8 +20,7 @@ from django.urls import path, include
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from core.api.views import ConfirmEmailView
-from core.api.views import ChatterBotApiView
-# ,ChatterBotTrainApiView
+from core.api.views import ChatterBotApiView,ChatterBotTrainApiView
 
 routes = getattr(settings, 'REACT_ROUTES', [])
 
@@ -38,7 +37,7 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/user/', include('core.api.urls',namespace='core-api')),
     path('api/chatbot/', ChatterBotApiView.as_view(), name='chatbot'),
-    # path('api/chatbot-train/', ChatterBotTrainApiView.as_view(), name='chatbot-train'),
+    path('api/chatbot-train/', ChatterBotTrainApiView.as_view(), name='chatbot-train'),
 ]
    
 

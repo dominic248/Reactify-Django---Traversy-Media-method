@@ -49,10 +49,12 @@ INSTALLED_APPS = [
 
     'allauth', 
     'allauth.account',
+    'allauth.socialaccount.providers.google',
 
     'rest_auth',
     'rest_auth.registration',
 
+    'chatterbot',
     'chatterbot.ext.django_chatterbot',
 
     'frontend',
@@ -62,7 +64,7 @@ INSTALLED_APPS = [
 
 CHATTERBOT = {
     'name': 'Charlie',
-    'django_app_name':'django_chatterbot',
+    # 'django_app_name':'django_chatterbot',
     # 'logic_adapters': [
     #     'chatterbot.logic.MathematicalEvaluation',
     #     'chatterbot.logic.TimeLogicAdapter',
@@ -70,7 +72,7 @@ CHATTERBOT = {
     # ],
     # 'storage_adapter':'chatterbot.storage.SQLStorageAdapter',
     'storage_adapter':'chatterbot.storage.SQLStorageAdapter',
-    'database_uri':'sqlite:///dbchatbot.sqlite3',
+    'database_uri':'sqlite:///db.sqlite3',
     # 'read_only':True
 }
 
