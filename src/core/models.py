@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 
 # Create your models here.
 
+
 class UserProfileManager(models.Manager):
     use_for_related_fields = True
 
