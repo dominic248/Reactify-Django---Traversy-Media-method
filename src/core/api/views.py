@@ -80,7 +80,6 @@ class ChatterBotApiView(APIView):
             response_data["text"]="Sorry, couldn't process your query, try something else?"
             return Response(response_data, status=200)
 
-# {"text": "486"}
 # {"text": "Hi"}
     def get(self, request, *args, **kwargs):
         """
