@@ -44,7 +44,7 @@ class App extends React.Component {
       Cookies.set("sessionid", sessioncookie.session_id);
       await axios
         .get(
-          "http://localhost:8000/api/user/current/details/",
+          "https://77afeae0.ngrok.io/api/user/current/details/",
           {
             headers: {
               "Accept": "application/json",

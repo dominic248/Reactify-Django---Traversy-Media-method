@@ -23,7 +23,7 @@ class SignUpDialogContent extends React.Component {
 
   
   async initRegister(submit){
-    await axios.post('http://localhost:8000/rest-auth/registration/',{
+    await axios.post('https://77afeae0.ngrok.io/rest-auth/registration/',{
         username: this.state.username,
         password1: this.state.password,
         password2: this.state.confirm_password,

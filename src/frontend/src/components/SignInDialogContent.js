@@ -43,7 +43,7 @@ class SignInDialogContent extends React.Component {
   async initLogin(username, password, rememberme) {
     await axios
       .post(
-        "http://localhost:8000/rest-auth/login/",
+        "https://77afeae0.ngrok.io/rest-auth/login/",
         {
           username: username,
           password: password
